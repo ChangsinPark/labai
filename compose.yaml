@@ -6,7 +6,9 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - 3003:3003
+    env_file:
+      - .env.local
     develop:
       watch:
         - path: ./packages.json
@@ -17,8 +19,15 @@ services:
           action: rebuild
         - path: .
           target: /app
-          acttion: sync
+          action: sync
     environment:
       - DB-URL=mongodb+srv://labadmin:7oL4fjACXRJJmexw@cluster0.q7ocx7a.mongodb.net/labai?retryWrites=true&w=majority&appName=Cluster0
+  nginx:
+    image: nginx:stable-alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./crt:/etc/nginx/certs
+    ports:
+      - 6443:6443
 volumes:
   tasked:
